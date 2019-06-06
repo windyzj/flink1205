@@ -15,12 +15,12 @@ object DateSetWcApp {
     val outputPath: String = tool.get("output")
 
     val env: ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
-
+    env.setParallelism(2)
     val txtDataSet: DataSet[String] = env.readTextFile(inputPath)
 
     val aggSet: AggregateDataSet[(String, Int)] = txtDataSet.flatMap(_.split(" ")).map((_,1)).groupBy(0).sum(1)
 
-    aggSet.writeAsCsv(outputPath).setParallelism(1)
+    aggSet.writeAsCsv(outputPath)
 
     env.execute()
 
