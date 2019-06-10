@@ -2,6 +2,7 @@ package com.atguigu.flink1205.util
 
 import java.util
 
+import com.alibaba.fastjson.serializer.SerializerFeature
 import com.alibaba.fastjson.{JSON, JSONObject}
 import com.atguigu.flink1205.bean.Startuplog
 import org.apache.flink.api.common.functions.RuntimeContext
@@ -36,8 +37,7 @@ object MyEsUtil {
 
       implicit val formats = org.json4s.DefaultFormats
       val jsonstr: String = org.json4s.native.Serialization.write(element)
-       val map: util.Map[String, String] = JSON.parseObject(jsonstr,classOf[util.Map[String,String]])
-      val indexRequest: IndexRequest = Requests.indexRequest().index(indexName).`type`("_doc").source(map)
+      val indexRequest: IndexRequest = Requests.indexRequest().index(indexName).`type`("_doc").source(jsonstr,XContentType.JSON)
       indexer.add(indexRequest)
     }
 
